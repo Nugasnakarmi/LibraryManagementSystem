@@ -15,7 +15,7 @@ public class LibraryManagerService : ILibraryManagerService
         string title = Helper.GetValidatedInput("Enter title for the book:");
         string author = Helper.GetValidatedInput("Enter author of the book:");
         int pubYear = Helper.GetValidatedNumber("Enter the year in which the book was published:",
-            "Publication year is not valid. Please try again.");
+            "Publication year is not valid. Please try again.", true);
 
         _bookLibraryService.AddNewBook(title, author, pubYear);
     }
@@ -143,7 +143,6 @@ public class LibraryManagerService : ILibraryManagerService
                     break;
 
                 case "5":
-
                     ListBorrowedBooks();
                     break;
 

@@ -10,7 +10,7 @@ public class Helper
 {
     public static string GetValidatedInput(string prompt)
     {
-        string input;
+        string? input;
         do
         {
             Console.Write(prompt);
@@ -24,23 +24,25 @@ public class Helper
         return input;
     }
 
-    public static int GetValidatedNumber(string prompt, string validationMessage)
+    public static int GetValidatedNumber(string prompt, string validationMessage, bool isPubYear = false)
     {
-        string input;
+        string? input;
         bool isValidNumber;
         int resultNumber;
+        bool invalidCondition;
         do
         {
-            Console.Write(prompt);
+            Console.WriteLine(prompt);
             input = Console.ReadLine()?.Trim();
             isValidNumber = int.TryParse(input, out resultNumber);
-            if (!isValidNumber)
+            invalidCondition = isPubYear ? !isValidNumber || resultNumber < 0 || resultNumber > DateTime.Now.Year : !isValidNumber;
+
+            if (invalidCondition)
             {
                 Console.WriteLine($"{validationMessage}");
             }
-        } while (!isValidNumber);
+        } while (invalidCondition);
 
         return resultNumber;
     }
-
 }
