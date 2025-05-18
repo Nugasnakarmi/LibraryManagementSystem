@@ -1,11 +1,6 @@
 ﻿using LibraryManagementSystem.Interfaces;
 using LibraryManagementSystem.Models;
 using LibraryManagementSystem.Utility;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace LibraryManagementSystem.Services;
 
@@ -14,6 +9,7 @@ public class BookLibraryService : IBookLibraryService
     //List of books will be where the console app will store books in memory
     private List<Book> books = new List<Book>();
 
+    //The id that will be incremented each time a book is added to the library.
     private int newBookId = 1;
 
     //Method to add new book
@@ -76,20 +72,16 @@ public class BookLibraryService : IBookLibraryService
         {
             case 1:
                 return SearchBookByTitle(Helper.GetValidatedInput("Enter title to search: "));
-                break;
 
             case 2:
                 return SearchBookByAuthor(Helper.GetValidatedInput("Enter author to search: "));
-                break;
 
             case 3:
                 return SearchBookByPublicationYear(Helper.GetValidatedNumber("Enter publication year to search: ",
                     "Year not valid, please try again. "));
-                break;
 
             default:
                 return [];
-                break;
         }
     }
 
