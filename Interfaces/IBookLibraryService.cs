@@ -10,8 +10,8 @@ public interface IBookLibraryService
 
     void ReturnBook(int bookId);
 
-    List<Book> ListBooks();
-
+    List<Book> ListAvailableBooks();
+    List<Book> ListBorrowedBooks();
     List<Book> SearchBook(int caseId);
 
     public List<Book> SearchBookByTitle(string title);

@@ -2,10 +2,9 @@
 using LibraryManagementSystem.Models;
 using LibraryManagementSystem.Utility;
 
-
 namespace LibraryManagementSystem.Services;
 
-public class LibraryManagerService: ILibraryManagerService
+public class LibraryManagerService : ILibraryManagerService
 {
     private IBookLibraryService _bookLibraryService;
 
@@ -21,27 +20,45 @@ public class LibraryManagerService: ILibraryManagerService
         _bookLibraryService.AddNewBook(title, author, pubYear);
     }
 
-    public void ListAvailableBooks()
+    public List<Book> ListAvailableBooks()
     {
-        List<Book> books = _bookLibraryService.ListBooks();
+        List<Book> books = _bookLibraryService.ListAvailableBooks();
         if (books.Count > 0)
         {
             Console.WriteLine("Id | Title | Author | Publication Year");
             foreach (Book b in books)
             {
-                Console.WriteLine($"{b.Id} | {b.Title} | {b.Author} | {b.PublicationYear}");
+                Console.WriteLine($"{b.Id} | {b.Title} | {b.Author} | {b.PublicationYear} ");
             }
         }
         else
         {
             Console.WriteLine("No books are available.");
         }
+        return books;
+    }
+
+    public void ListBorrowedBooks()
+    {
+        List<Book> borrowedBooks = _bookLibraryService.ListBorrowedBooks();
+        if (borrowedBooks.Count > 0)
+        {
+            Console.WriteLine("Id | Title | Author | Publication Year");
+            foreach (Book b in borrowedBooks)
+            {
+                Console.WriteLine($"{b.Id} | {b.Title} | {b.Author} | {b.PublicationYear}");
+            }
+        }
+        else
+        {
+            Console.WriteLine("No books have been borrowed.");
+        }
     }
 
     public void BorrowBook()
     {
-        Console.WriteLine("");
-        List<Book> books = _bookLibraryService.ListBooks();
+        
+        List<Book> books = _bookLibraryService.ListAvailableBooks();
         if (books.Count > 0)
         {
             int bookId = Helper.GetValidatedNumber("Which book do you want to borrow? Please enter the book id.",
@@ -63,17 +80,23 @@ public class LibraryManagerService: ILibraryManagerService
 
     public void SearchBook()
     {
-
-        int searchByCase = Helper.GetValidatedNumber("Do you want to search by: \n 1)Title\n2)Author\n3)Publication Year",
+        int searchByCase = Helper.GetValidatedNumber("Do you want to search by: \n1)Title\n2)Author\n3)Publication Year\n",
             "Number not valid. Please try again");
         List<Book> resultBooks = _bookLibraryService.SearchBook(searchByCase);
-        foreach (Book book in resultBooks)
+        if (resultBooks.Count > 0)
         {
-            Console.WriteLine($"{book.Id} | {book.Title} | {book.Author} | {book.PublicationYear}");
+            foreach (Book book in resultBooks)
+            {
+                Console.WriteLine($"{book.Id} | {book.Title} | {book.Author} | {book.PublicationYear}");
+            }
+        }
+        else
+        {
+            Console.WriteLine($"No books are available as per the search.");
         }
     }
 
-    public async Task Run()
+    public void RunLibrary()
     {
         bool isRunning = true;
         //Add few books for library
@@ -92,14 +115,15 @@ public class LibraryManagerService: ILibraryManagerService
             Console.WriteLine("2. Borrow a book");
             Console.WriteLine("3. Return a book");
             Console.WriteLine("4. List available books");
-            Console.WriteLine("5. Search books");
-            Console.WriteLine("6. Exit");
+            Console.WriteLine("5. List borrowed books");
+            Console.WriteLine("6. Search books");
+            Console.WriteLine("7. Exit\n");
             Console.WriteLine("Please enter the number you want: ");
 
             switch (Console.ReadLine())
             {
                 case "1":
-                    Console.WriteLine("1. Add a new book");
+                    Console.WriteLine("Add a new book");
                     AddNewBook();
                     break;
 
@@ -119,11 +143,15 @@ public class LibraryManagerService: ILibraryManagerService
                     break;
 
                 case "5":
-                    Console.WriteLine("1. Add a new book");
-                    SearchBook();
+
+                    ListBorrowedBooks();
                     break;
 
                 case "6":
+                    SearchBook();
+                    break;
+
+                case "7":
                     Console.WriteLine("You will now exit. Please visit the library again.");
                     isRunning = false;
                     break;

@@ -13,4 +13,4 @@ var host = Host.CreateDefaultBuilder(args)
     .Build();
 
 var libraryManager = host.Services.GetRequiredService<ILibraryManagerService>();
-await libraryManager.Run();
+libraryManager.RunLibrary();

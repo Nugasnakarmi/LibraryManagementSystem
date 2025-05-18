@@ -30,39 +30,46 @@ public class BookLibraryService : IBookLibraryService
     //Method to borrow available book
     public void BorrowAvailableBook(int bookId)
     {
-        Book book = ListBooks().FirstOrDefault(b => b.Id == bookId);
+        Book? book = books.FirstOrDefault(b => b.Id == bookId);
 
-        if (book != null)
+        if (book != null && book.IsCurrentlyBorrowed)
         {
-            Console.WriteLine($"You have successfully borrowed: {book.Title}");
-            book.IsCurrentlyBorrowed = true;
+            Console.WriteLine($"{book.Title} has already been borrowed.");
+        }
+        else if (book == null)
+        {
+            Console.WriteLine($"No available book found with ID {bookId}.");
         }
         else
         {
-            Console.WriteLine($"No available book found with ID {bookId}.");
+            Console.WriteLine($"You have successfully borrowed: {book.Title}");
+            book.IsCurrentlyBorrowed = true;
         }
     }
 
     //Method to return borrowed book
     public void ReturnBook(int bookId)
     {
-        Book book = books.Find(b => b.IsCurrentlyBorrowed && b.Id == bookId);
-        if (book != null)
+        Book? book = books.Find(b => b.Id == bookId);
+        if (book == null)
+        {
+            Console.WriteLine($"Book doesn't exist with Id: {bookId}.");
+        }
+        else if (!book.IsCurrentlyBorrowed)
+        {
+            Console.WriteLine($"Book has not been borrowed, book Id is: {bookId}.");
+        }
+        else
         {
             Console.WriteLine($"You have successfully returned: {book.Title} to the library.");
             book.IsCurrentlyBorrowed = false;
         }
-        else
-        {
-            Console.WriteLine($"Book doesn't exist or has not been borrowed with Id: {bookId}.");
-        }
     }
 
-    //Method to list available books
-    public List<Book> ListBooks()
-    {
-        return books.FindAll(b => !b.IsCurrentlyBorrowed);
-    }
+    
+    public List<Book> ListAvailableBooks() => books.FindAll(b=>!b.IsCurrentlyBorrowed);
+    
+    public List<Book> ListBorrowedBooks() => books.FindAll(b => b.IsCurrentlyBorrowed);
 
     //To Search bookds
 

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using LibraryManagementSystem.Models;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -9,9 +10,10 @@ namespace LibraryManagementSystem.Interfaces;
 public interface ILibraryManagerService
 {
     void AddNewBook();
-    void ListAvailableBooks();
+    List<Book> ListAvailableBooks();
+    void ListBorrowedBooks();
     void BorrowBook();
     void ReturnBook();
     void SearchBook();
-    Task Run();
+    void RunLibrary();
 }
